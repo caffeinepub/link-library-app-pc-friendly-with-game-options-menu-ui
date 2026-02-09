@@ -1,0 +1,59 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Permanent black/white theme (no scroll-triggered color shifts)",
+  "requirements": [
+    {
+      "id": "REQ-10",
+      "summary": "Force a permanent dark (black background / white text / white accents) theme regardless of system theme and ensure scrolling never flips to light styling.",
+      "acceptanceCriteria": [
+        "On initial load, the app renders with a black (or near-black) background, white text, and white accents.",
+        "Scrolling the main page and scrolling inside the links list does not change background/text/accent colors.",
+        "There is no mode where the UI switches to a light background or dark text (including due to system theme)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Make the base theme tokens permanently dark by aligning :root variables to the current .dark (near-black background, white foreground/primary/accent) and adding global guards (e.g., set color-scheme: dark) so system theme cannot produce a light palette."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add a small runtime guard that ensures the root element is locked to dark styling for the whole app lifecycle (e.g., ensure the document root has the dark class), without touching immutable entry files."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Remove/neutralize scroll-dependent translucency, blur, and semi-transparent overlays so the UI reads as solid black during scroll.",
+      "acceptanceCriteria": [
+        "While scrolling, the page background remains visually consistent (no lightening/darkening pulses or transparency-driven changes).",
+        "Header, footer, and content panels maintain consistent contrast against the background while scrolling.",
+        "Any background image/overlay treatment does not introduce visible color variation during scroll."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/layout/GameMenuLayout.tsx",
+          "operation": "modify",
+          "description": "Replace translucent/blurred background overlay treatment with an opaque black (or background token at full opacity) overlay and remove backdrop blur so the fixed background cannot create perceived color shifts while scrolling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Remove/replace header/footer translucent backgrounds and backdrop-blur classes (e.g., bg-card/30, bg-card/50, border alpha variants) with opaque dark surfaces to keep contrast stable during scroll."
+        },
+        {
+          "path": "frontend/src/components/link-library/LinkForm.tsx",
+          "operation": "modify",
+          "description": "Update the form panel styling to avoid semi-transparent backgrounds/backdrop blur (e.g., replace bg-card/50 + backdrop-blur) with an opaque dark panel so it does not visually shift while scrolling."
+        },
+        {
+          "path": "frontend/src/components/link-library/LinkList.tsx",
+          "operation": "modify",
+          "description": "Update the scrollable list container and row styling to remove translucency/backdrop blur and use opaque dark backgrounds (including inside the ScrollArea content) to prevent any scroll-related lightening/darkening effects."
+        }
+      ]
+    }
+  ]
+}

@@ -1,2 +1,3 @@
-# link-library-app-pc-friendly-with-game-options-menu-ui
-Exported from Caffeine project: Link Library App (PC-friendly) with Game Options Menu UI
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

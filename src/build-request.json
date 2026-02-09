@@ -1,0 +1,57 @@
+{
+  "kind": "build_request",
+  "title": "Lock UI to permanent black/white theme and prevent scroll-triggered color changes",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-10",
+      "text": "Make the app’s theme permanently dark: black background, white text, and white accents at all times (no light theme), including while scrolling any scrollable areas.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "it’s fine but when i scroll the color changes just keep it black background white text and white accents permanently without it changing on scroll then that’s it"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On initial load, the app renders with a black (or near-black) background, white text, and white accents.",
+        "Scrolling the main page and scrolling inside the links list does not change background/text/accent colors.",
+        "There is no mode where the UI switches to a light background or dark text (including due to system theme)."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Remove or neutralize any scroll-dependent visual effects that cause perceived color shifts (e.g., translucent overlays/backdrop blur over the background image) so the background reads as solid black during scroll.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "when i scroll the color changes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "While scrolling, the page background remains visually consistent (no lightening/darkening pulses or transparency-driven changes).",
+        "Header, footer, and content panels maintain consistent contrast against the background while scrolling.",
+        "Any background image/overlay treatment does not introduce visible color variation during scroll."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit files under frontend/src/components/ui (read-only shadcn components).",
+    "Do not edit immutable paths listed in SYSTEM_CONTEXT (including frontend/src/main.tsx and the Internet Identity/actor hooks).",
+    "Keep all changes within the existing single-page React app; no new backend canisters or services."
+  ],
+  "nonGoals": [
+    "Adding new features beyond stabilizing the theme during scrolling.",
+    "Changing link library CRUD behavior or backend data model.",
+    "Introducing a user-facing theme toggle UI."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

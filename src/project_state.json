@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 7,
+  "summary": "Desktop PC app to paste links and organize them into a clean, accessible library with a UI styled like a game options menu.",
+  "architectural_notes": [
+    "Add a theme/contrast system (e.g., light/dark tokens) so text and accent colors are derived from background luminance/contrast rules rather than hardcoded (remove orange accent).",
+    "Ensure theme/colors remain stable during scroll (no scroll-triggered theme/contrast recalculation or CSS/JS that changes background/text/accent colors on scroll); enforce fixed black background with white text + white accents."
+  ],
+  "known_issues": [
+    "Colors/theme unexpectedly change when scrolling; user wants permanently black background, white text, and white accents with no scroll-dependent changes."
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-create-a-desktop-pc-friendly-ui-that-lets-users-paste-a-url-to-add-it-to-their-library-view-their-saved-links-and-open-a-selected-link-in-a-new-browser-tab-window",
+      "title": "Create a desktop-PC-friendly UI that lets users paste a URL to add it to their library, view their saved links, and open a selected link in a new browser tab/window.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-library-management-actions-in-the-ui-edit-a-saved-link-and-delete-a-saved-link-with-accessible-confirmation-for-destructive-actions",
+      "title": "Add library management actions in the UI: edit a saved link and delete a saved link, with accessible confirmation for destructive actions.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-integrate-frontend-data-flow-with-the-backend-canister-using-react-query-for-fetching-mutating-the-user-s-link-library-including-loading-and-error-states",
+      "title": "Integrate frontend data flow with the backend canister using React Query for fetching/mutating the user’s link library, including loading and error states.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-clean-visual-theme-styled-like-a-game-options-menu-across-the-app-consistent-typography-spacing-panels-focus-states-optimized-for-mouse-keyboard-navigation-on-desktop",
+      "title": "Apply a clean visual theme styled like a game options menu across the app (consistent typography, spacing, panels, focus states), optimized for mouse + keyboard navigation on desktop.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-authentication-entry-point-using-internet-identity-so-users-can-sign-in-out-and-have-a-separate-personal-link-library",
+      "title": "Add an authentication entry point using Internet Identity so users can sign in/out and have a separate personal link library.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-and-include-static-visual-assets-to-support-the-game-options-menu-look-and-render-them-from-the-frontend-as-static-files",
+      "title": "Generate and include static visual assets to support the game-options-menu look and render them from the frontend as static files.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-global-theme-color-tokens-so-the-ui-no-longer-uses-orange-colored-accents-and-so-the-primary-accent-colors-resolve-to-neutral-black-white-depending-on-the-current-theme-light-vs-dark-implement-this-by-adjusting-the-css-custom-properties-in-frontend-src-index-css-e-g-primary-primary-foreground-accent-accent-foreground-ring-so-accent-primary-styling-matches-the-background-foreground-contrast-white-on-dark-theme-black-on-light-theme-while-keeping-focus-rings-and-borders-clearly-visible",
+      "title": "Update the global theme color tokens so the UI no longer uses orange/colored accents, and so the primary/accent colors resolve to neutral black/white depending on the current theme (light vs dark). Implement this by adjusting the CSS custom properties in `frontend/src/index.css` (e.g., `--primary`, `--primary-foreground`, `--accent`, `--accent-foreground`, `--ring`) so accent/primary styling matches the background/foreground contrast (white on dark theme, black on light theme) while keeping focus rings and borders clearly visible.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-all-user-visible-text-render-in-a-single-consistent-color-per-theme-white-in-dark-theme-black-in-light-theme-by-removing-replacing-uses-of-muted-secondary-text-color-classes-in-app-components-e-g-text-muted-foreground-carddescription-defaults-with-the-standard-foreground-color-ensure-this-applies-across-authenticated-and-unauthenticated-screens-including-empty-states-loading-states-subtitles-descriptions-and-footer-text",
+      "title": "Make all user-visible text render in a single consistent color per theme (white in dark theme, black in light theme) by removing/replacing uses of muted/secondary text color classes in app components (e.g., `text-muted-foreground`, `CardDescription` defaults) with the standard foreground color. Ensure this applies across authenticated and unauthenticated screens, including empty states, loading states, subtitles/descriptions, and footer text.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-app-s-theme-permanently-dark-black-background-white-text-and-white-accents-at-all-times-no-light-theme-including-while-scrolling-any-scrollable-areas",
+      "title": "Make the app’s theme permanently dark: black background, white text, and white accents at all times (no light theme), including while scrolling any scrollable areas.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-or-neutralize-any-scroll-dependent-visual-effects-that-cause-perceived-color-shifts-e-g-translucent-overlays-backdrop-blur-over-the-background-image-so-the-background-reads-as-solid-black-during-scroll",
+      "title": "Remove or neutralize any scroll-dependent visual effects that cause perceived color shifts (e.g., translucent overlays/backdrop blur over the background image) so the background reads as solid black during scroll.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create a PC app where users can paste any link and add it to an accessible library, with a clean UI resembling a game options menu.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Implement authenticated per-user storage for a link library so a signed-in user can add, list, update, and delete saved links.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Update UI theming so all text uses a consistent color that adapts to background (white on dark, black on light) and replace the orange accent with black/white accents that match the current background for consistent contrast.",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Link Library App (PC-friendly) with Game Options Menu UI",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

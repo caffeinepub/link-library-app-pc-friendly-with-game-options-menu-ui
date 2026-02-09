@@ -1,0 +1,16 @@
+{
+  "frontend/src/App.tsx": "Main application component with runtime dark mode enforcement via useEffect, opaque header/footer backgrounds, and authentication/profile flow.",
+  "frontend/src/hooks/useUserProfile.ts": "React Query hooks for fetching and saving user profiles with proper loading state handling to prevent modal flash on initial load.",
+  "frontend/src/hooks/useLinks.ts": "React Query hooks for all link CRUD operations (fetch, add, update, delete) with automatic cache invalidation after mutations.",
+  "frontend/src/components/layout/GameMenuLayout.tsx": "Layout wrapper with background image and fully opaque black overlay (no translucency or blur) to prevent scroll-triggered color shifts.",
+  "frontend/src/components/auth/AuthControls.tsx": "Authentication button component that handles sign in/out with Internet Identity and clears query cache on logout.",
+  "frontend/src/components/auth/ProfileSetupDialog.tsx": "Modal dialog shown on first login to capture the user's name for their profile, using unified foreground text color for dialog descriptions.",
+  "frontend/src/components/link-library/LinkLibraryPanel.tsx": "Container component that orchestrates the link form and list, handling loading and error states with unified foreground text color.",
+  "frontend/src/components/link-library/LinkForm.tsx": "Form component for adding new links with opaque card background (no translucency) and validation.",
+  "frontend/src/components/link-library/LinkList.tsx": "Displays saved links in a scrollable list with opaque backgrounds (no translucency) and edit/delete actions.",
+  "frontend/src/components/link-library/EditLinkDialog.tsx": "Modal dialog for editing existing link details with validation and update functionality, using unified foreground text color for dialog descriptions.",
+  "frontend/src/components/common/ConfirmDialog.tsx": "Reusable confirmation dialog for destructive actions like deleting links, using unified foreground text color for alert descriptions.",
+  "frontend/src/utils/validateUrl.ts": "Client-side URL validation utility that checks for proper http/https protocol and valid URL format.",
+  "frontend/src/index.css": "Global styles with permanent dark theme (black background, white text/accents) forced via color-scheme and identical :root/.dark tokens, eliminating any light mode possibility.",
+  "frontend/tailwind.config.js": "Tailwind configuration extended with game-themed colors, custom shadows, and typography settings for the options menu look."
+}
