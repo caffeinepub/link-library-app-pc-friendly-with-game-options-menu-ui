@@ -1,57 +1,142 @@
 {
   "kind": "build_request",
-  "title": "Lock UI to permanent black/white theme and prevent scroll-triggered color changes",
+  "title": "Add per-link images, color personalization, and app-like tile view with hover effects",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-10",
-      "text": "Make the app’s theme permanently dark: black background, white text, and white accents at all times (no light theme), including while scrolling any scrollable areas.",
-      "target": "frontend",
+      "id": "REQ-12",
+      "text": "Extend the backend link data model to support per-link personalization fields: an optional image (stored as text) and an optional user-selected color (stored as text), and ensure these fields are persisted per user alongside url/title/description.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-6"
         ],
         "quotes": [
-          "it’s fine but when i scroll the color changes just keep it black background white text and white accents permanently without it changing on scroll then that’s it"
+          "make it to where users can add pictures or images to their link and be able to choose any common colors to make it more personable"
         ]
       },
       "acceptanceCriteria": [
-        "On initial load, the app renders with a black (or near-black) background, white text, and white accents.",
-        "Scrolling the main page and scrolling inside the links list does not change background/text/accent colors.",
-        "There is no mode where the UI switches to a light background or dark text (including due to system theme)."
+        "Backend Link type includes new optional fields for image and color and they are stored/retrieved with the rest of the link data.",
+        "Existing CRUD methods (add/update/get/getAll) preserve the new fields without dropping them.",
+        "Unauthorized callers are still rejected the same way as before (no permission regressions)."
       ]
     },
     {
-      "id": "REQ-11",
-      "text": "Remove or neutralize any scroll-dependent visual effects that cause perceived color shifts (e.g., translucent overlays/backdrop blur over the background image) so the background reads as solid black during scroll.",
-      "target": "frontend",
+      "id": "REQ-13",
+      "text": "Fix link identity consistency across the app by returning stable link identifiers from the backend so the frontend can reliably edit/delete the correct link (do not rely on array index or URL as an implicit ID).",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-6"
         ],
         "quotes": [
-          "when i scroll the color changes"
+          "make it to where users can add pictures or images to their link"
         ]
       },
       "acceptanceCriteria": [
-        "While scrolling, the page background remains visually consistent (no lightening/darkening pulses or transparency-driven changes).",
-        "Header, footer, and content panels maintain consistent contrast against the background while scrolling.",
-        "Any background image/overlay treatment does not introduce visible color variation during scroll."
+        "Backend getAllLinks returns link entries that include the link id used by addLink/updateLink/deleteLink (e.g., id + link payload).",
+        "Frontend uses the backend-provided id for edit and delete actions (no URL-as-ID and no index keys for identity).",
+        "Editing a link updates the intended saved item even if the URL changes, and deleting a link deletes the intended saved item."
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Update the Add Link form to let users optionally attach an image to a link and pick a color from a set of common colors, and submit these values when creating a link.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "users can add pictures or images to their link and be able to choose any common colors"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Add Link UI includes an optional image input (file upload) and a color selector with a set of common colors.",
+        "On submit, the created link includes the selected image (as text) and selected color (as text) when provided.",
+        "If no image is selected, link creation still works and the image field is absent/empty (no validation error).",
+        "If an image is selected, the UI shows a small preview before submission and provides a way to clear/replace it."
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "text": "Update the Edit Link dialog to allow changing/removing the link image and changing the selected color, and persist these changes via the existing update flow.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "add pictures or images to their link",
+          "choose any common colors"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Edit Link dialog displays the current image (if any) and current color (if any) and allows updating both.",
+        "Users can remove an existing image (set it back to none) and save successfully.",
+        "Saving changes updates the correct link record using its stable id."
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "text": "Implement an app-like minimized/tile view for saved links so links look like apps: show a square/compact tile with the link image when available; when no image is available, show a fallback avatar that uses the link title (e.g., first letter(s)).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "minimize the links to make it look like apps apps with no image will begin with whatever it’s titled"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The link library renders saved links as compact tiles (grid or similarly minimized layout) instead of only a full-width list row layout.",
+        "Each tile displays the link image if present; otherwise it displays a fallback derived from the title (e.g., first letter(s)) in a visually centered avatar area.",
+        "The selected per-link color is visibly applied to the tile (e.g., background/accent/border) while keeping text legible in the app’s permanently dark theme.",
+        "Open/edit/delete actions remain available for each saved link in the tile view."
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "text": "Add desktop hover interactions to link tiles: on mouse hover, visually elevate/highlight the tile (and optionally reveal quick actions) without breaking keyboard accessibility.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "make them hover when you move your mouse over it if possible"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Hovering over a tile changes its appearance (e.g., subtle scale, border/outline, shadow, or background shift) to clearly indicate interactivity.",
+        "The same interactive affordance is available via keyboard focus (focus-visible styles), and hover effects do not interfere with click targets.",
+        "Tiles remain clickable to open the link, and action buttons remain reachable and usable."
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under frontend/src/components/ui (read-only shadcn components).",
-    "Do not edit immutable paths listed in SYSTEM_CONTEXT (including frontend/src/main.tsx and the Internet Identity/actor hooks).",
-    "Keep all changes within the existing single-page React app; no new backend canisters or services."
+    "Backend must remain a single Motoko actor in backend/main.mo; only create backend/migration.mo if a state upgrade is required.",
+    "Do not modify files in frontend immutablePaths (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui). Compose existing UI components instead.",
+    "Keep the app permanently dark (black background, white text/accents) and do not reintroduce scroll-dependent color shifts."
   ],
   "nonGoals": [
-    "Adding new features beyond stabilizing the theme during scrolling.",
-    "Changing link library CRUD behavior or backend data model.",
-    "Introducing a user-facing theme toggle UI."
+    "Adding third-party image hosting/CDN integrations.",
+    "Adding real-time collaboration or syncing features.",
+    "Adding new authentication providers beyond Internet Identity."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

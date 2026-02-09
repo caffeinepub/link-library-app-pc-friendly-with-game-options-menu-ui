@@ -1,15 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { Link } from '../backend';
-
-export interface LinkWithId extends Link {
-  id: string;
-}
+import type { Link, LinkResponse } from '../backend';
 
 export function useGetAllLinks() {
   const { actor, isFetching } = useActor();
 
-  return useQuery<Link[]>({
+  return useQuery<LinkResponse[]>({
     queryKey: ['links'],
     queryFn: async () => {
       if (!actor) return [];

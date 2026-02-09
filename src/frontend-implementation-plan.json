@@ -1,57 +1,131 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Permanent black/white theme (no scroll-triggered color shifts)",
+  "title": "Per-link personalization (image/color) and app-like link tiles with stable IDs",
   "requirements": [
     {
-      "id": "REQ-10",
-      "summary": "Force a permanent dark (black background / white text / white accents) theme regardless of system theme and ensure scrolling never flips to light styling.",
+      "id": "REQ-13",
+      "summary": "Use backend-provided stable link ids for edit/delete identity throughout the UI.",
       "acceptanceCriteria": [
-        "On initial load, the app renders with a black (or near-black) background, white text, and white accents.",
-        "Scrolling the main page and scrolling inside the links list does not change background/text/accent colors.",
-        "There is no mode where the UI switches to a light background or dark text (including due to system theme)."
+        "Frontend uses the backend-provided id for edit and delete actions (no URL-as-ID and no index keys for identity).",
+        "Editing a link updates the intended saved item even if the URL changes, and deleting a link deletes the intended saved item."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/index.css",
+          "path": "frontend/src/hooks/useLinks.ts",
           "operation": "modify",
-          "description": "Make the base theme tokens permanently dark by aligning :root variables to the current .dark (near-black background, white foreground/primary/accent) and adding global guards (e.g., set color-scheme: dark) so system theme cannot produce a light palette."
+          "description": "Update link fetching types to consume backend link entries that include a stable id (use LinkResponse from the generated backend types) and ensure hooks expose id + link payload to the UI."
         },
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/components/link-library/LinkLibraryPanel.tsx",
           "operation": "modify",
-          "description": "Add a small runtime guard that ensures the root element is locked to dark styling for the whole app lifecycle (e.g., ensure the document root has the dark class), without touching immutable entry files."
+          "description": "Update the link library container to pass the id-aware link entries down to the rendering component(s) instead of plain Link[] so downstream edit/delete actions can use stable ids."
+        },
+        {
+          "path": "frontend/src/components/common/ConfirmDialog.tsx",
+          "operation": "modify",
+          "description": "Change the confirmation dialog prop from linkUrl to linkId and invoke deletion with the stable id."
+        },
+        {
+          "path": "frontend/src/components/link-library/EditLinkDialog.tsx",
+          "operation": "modify",
+          "description": "Adjust the dialog props to include the stable link id and use it in the update flow (remove URL-as-ID behavior)."
         }
       ]
     },
     {
-      "id": "REQ-11",
-      "summary": "Remove/neutralize scroll-dependent translucency, blur, and semi-transparent overlays so the UI reads as solid black during scroll.",
+      "id": "REQ-14",
+      "summary": "Extend the Add Link form with optional image upload + preview/clear and a common-color selector, and submit these fields when creating a link.",
       "acceptanceCriteria": [
-        "While scrolling, the page background remains visually consistent (no lightening/darkening pulses or transparency-driven changes).",
-        "Header, footer, and content panels maintain consistent contrast against the background while scrolling.",
-        "Any background image/overlay treatment does not introduce visible color variation during scroll."
+        "The Add Link UI includes an optional image input (file upload) and a color selector with a set of common colors.",
+        "On submit, the created link includes the selected image (as text) and selected color (as text) when provided.",
+        "If no image is selected, link creation still works and the image field is absent/empty (no validation error).",
+        "If an image is selected, the UI shows a small preview before submission and provides a way to clear/replace it."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/layout/GameMenuLayout.tsx",
-          "operation": "modify",
-          "description": "Replace translucent/blurred background overlay treatment with an opaque black (or background token at full opacity) overlay and remove backdrop blur so the fixed background cannot create perceived color shifts while scrolling."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Remove/replace header/footer translucent backgrounds and backdrop-blur classes (e.g., bg-card/30, bg-card/50, border alpha variants) with opaque dark surfaces to keep contrast stable during scroll."
-        },
-        {
           "path": "frontend/src/components/link-library/LinkForm.tsx",
           "operation": "modify",
-          "description": "Update the form panel styling to avoid semi-transparent backgrounds/backdrop blur (e.g., replace bg-card/50 + backdrop-blur) with an opaque dark panel so it does not visually shift while scrolling."
+          "description": "Add optional image file input that converts the chosen file to text (e.g., a data URL) for submission, show a small preview, and add a clear/replace control; also add a common-color selector and include optional image/color fields in the addLink payload."
         },
         {
-          "path": "frontend/src/components/link-library/LinkList.tsx",
+          "path": "frontend/src/utils/linkPersonalization.ts",
+          "operation": "create",
+          "description": "Add small utilities for link personalization (e.g., convert file to text for storage, define the common color set, and normalize/validate color strings) to keep form and tile UI logic consistent."
+        }
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "summary": "Allow editing/removing a link image and changing the link color in the Edit Link dialog, persisting via the existing update flow.",
+      "acceptanceCriteria": [
+        "The Edit Link dialog displays the current image (if any) and current color (if any) and allows updating both.",
+        "Users can remove an existing image (set it back to none) and save successfully.",
+        "Saving changes updates the correct link record using its stable id."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/link-library/EditLinkDialog.tsx",
           "operation": "modify",
-          "description": "Update the scrollable list container and row styling to remove translucency/backdrop blur and use opaque dark backgrounds (including inside the ScrollArea content) to prevent any scroll-related lightening/darkening effects."
+          "description": "Add image preview + replace/remove controls and a common-color selector, initialized from the existing link data; submit updated optional image/color values via the update flow using the stable id."
+        },
+        {
+          "path": "frontend/src/utils/linkPersonalization.ts",
+          "operation": "modify",
+          "description": "Share common-color options and image-text conversion helpers with the edit dialog so add/edit behaviors match."
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "Render saved links as compact app-like tiles with image-or-initials fallback and visible per-link color styling in the dark theme.",
+      "acceptanceCriteria": [
+        "The link library renders saved links as compact tiles (grid or similarly minimized layout) instead of only a full-width list row layout.",
+        "Each tile displays the link image if present; otherwise it displays a fallback derived from the title (e.g., first letter(s)) in a visually centered avatar area.",
+        "The selected per-link color is visibly applied to the tile (e.g., background/accent/border) while keeping text legible in the app’s permanently dark theme.",
+        "Open/edit/delete actions remain available for each saved link in the tile view."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/link-library/LinkTileGrid.tsx",
+          "operation": "create",
+          "description": "Create a tile-grid renderer for id-aware link entries that displays a compact square tile per link, showing the image when provided and otherwise a title-derived fallback avatar; apply the stored per-link color as a tile accent/background/border while preserving legibility in the permanent dark theme."
+        },
+        {
+          "path": "frontend/src/components/link-library/LinkTile.tsx",
+          "operation": "create",
+          "description": "Create a reusable tile component encapsulating open/edit/delete actions, image rendering, fallback avatar from title, and per-link color styling for consistent behavior across the grid."
+        },
+        {
+          "path": "frontend/src/components/link-library/LinkLibraryPanel.tsx",
+          "operation": "modify",
+          "description": "Wire the new tile view into the existing authenticated link library UI by rendering LinkTileGrid in place of the current list view (no new routes/pages)."
+        },
+        {
+          "path": "frontend/src/utils/linkPersonalization.ts",
+          "operation": "modify",
+          "description": "Add helpers for deriving fallback initials from the title and for mapping stored color text to safe, legible tile styling choices suitable for the permanent dark theme."
+        }
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "summary": "Add hover and keyboard-focus interactions to link tiles (elevation/highlight and optional quick actions) without breaking accessibility.",
+      "acceptanceCriteria": [
+        "Hovering over a tile changes its appearance (e.g., subtle scale, border/outline, shadow, or background shift) to clearly indicate interactivity.",
+        "The same interactive affordance is available via keyboard focus (focus-visible styles), and hover effects do not interfere with click targets.",
+        "Tiles remain clickable to open the link, and action buttons remain reachable and usable."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/link-library/LinkTile.tsx",
+          "operation": "modify",
+          "description": "Implement desktop hover styles (e.g., subtle elevation/outline/scale) paired with focus-visible styles for keyboard parity; ensure action buttons remain reachable and that hover effects do not overlap or reduce click target accessibility."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "If needed, add minimal global styling adjustments to support consistent focus-visible/transition behavior for the tile interactions while keeping the app permanently dark and avoiding any scroll-dependent color shifts."
         }
       ]
     }

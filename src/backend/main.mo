@@ -3,7 +3,9 @@ import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
@@ -12,6 +14,13 @@ actor {
     url : Text;
     title : Text;
     description : ?Text;
+    image : ?Text;
+    color : ?Text;
+  };
+
+  public type LinkResponse = {
+    id : Text;
+    link : Link;
   };
 
   public type UserProfile = {
@@ -61,7 +70,7 @@ actor {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can add links");
     };
-    
+
     let userLinkMap = getUserLinkMap(caller);
     if (userLinkMap.containsKey(id)) {
       Runtime.trap("Link already exists with this ID");
@@ -73,7 +82,7 @@ actor {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can update links");
     };
-    
+
     let userLinkMap = getUserLinkMap(caller);
     switch (userLinkMap.get(id)) {
       case (null) { Runtime.trap("Link not found") };
@@ -85,7 +94,7 @@ actor {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can delete links");
     };
-    
+
     let userLinkMap = getUserLinkMap(caller);
     switch (userLinkMap.get(id)) {
       case (null) { Runtime.trap("Link not found") };
@@ -97,7 +106,7 @@ actor {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can get links");
     };
-    
+
     switch (userLinks.get(caller)) {
       case (null) { Runtime.trap("Link not found") };
       case (?userLinkMap) {
@@ -109,14 +118,23 @@ actor {
     };
   };
 
-  public query ({ caller }) func getAllLinks() : async [Link] {
+  public query ({ caller }) func getAllLinks() : async [LinkResponse] {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can get all links");
     };
-    
+
     switch (userLinks.get(caller)) {
       case (null) { [] };
-      case (?userLinkMap) { userLinkMap.values().toArray() };
+      case (?userLinkMap) {
+        let entries = userLinkMap.toArray();
+        let responses = entries.map(
+          func(tuple) {
+            let (id, link) = tuple;
+            { id; link };
+          }
+        );
+        responses;
+      };
     };
   };
 };

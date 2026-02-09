@@ -13,8 +13,11 @@ import type { Principal } from '@icp-sdk/core/principal';
 export interface Link {
   'url' : string,
   'title' : string,
+  'color' : [] | [string],
   'description' : [] | [string],
+  'image' : [] | [string],
 }
+export interface LinkResponse { 'id' : string, 'link' : Link }
 export interface UserProfile { 'name' : string }
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
@@ -24,7 +27,7 @@ export interface _SERVICE {
   'addLink' : ActorMethod<[string, Link], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'deleteLink' : ActorMethod<[string], undefined>,
-  'getAllLinks' : ActorMethod<[], Array<Link>>,
+  'getAllLinks' : ActorMethod<[], Array<LinkResponse>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getLink' : ActorMethod<[string], Link>,

@@ -14,15 +14,15 @@ import { Loader2 } from 'lucide-react';
 interface ConfirmDialogProps {
   title: string;
   description: string;
-  linkUrl: string;
+  linkId: string;
   onClose: () => void;
 }
 
-export default function ConfirmDialog({ title, description, linkUrl, onClose }: ConfirmDialogProps) {
+export default function ConfirmDialog({ title, description, linkId, onClose }: ConfirmDialogProps) {
   const { mutate: deleteLink, isPending } = useDeleteLink();
 
   const handleConfirm = () => {
-    deleteLink(linkUrl, {
+    deleteLink(linkId, {
       onSuccess: () => {
         onClose();
       },

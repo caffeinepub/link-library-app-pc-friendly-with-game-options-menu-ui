@@ -2,10 +2,94 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-make-the-app-s-theme-permanently-dark-black-background-white-text-and-white-accents-at-all-times-no-light-theme-including-while-scrolling-any-scrollable-areas",
-      "featureTitle": "Make the app’s theme permanently dark: black background, white text, and white accents at all times (no light theme), including while scrolling any scrollable areas.",
+      "featureId": "feature-fix-link-identity-consistency-across-the-app-by-returning-stable-link-identifiers-from-the-backend-so-the-frontend-can-reliably-edit-delete-the-correct-link-do-not-rely-on-array-index-or-url-as-an-implicit-id",
+      "featureTitle": "Fix link identity consistency across the app by returning stable link identifiers from the backend so the frontend can reliably edit/delete the correct link (do not rely on array index or URL as an implicit ID).",
       "files": [
-        "frontend/src/App.tsx",
+        "frontend/src/components/common/ConfirmDialog.tsx",
+        "frontend/src/components/link-library/EditLinkDialog.tsx",
+        "frontend/src/components/link-library/LinkLibraryPanel.tsx",
+        "frontend/src/hooks/useLinks.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-13"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-add-link-form-to-let-users-optionally-attach-an-image-to-a-link-and-pick-a-color-from-a-set-of-common-colors-and-submit-these-values-when-creating-a-link",
+      "featureTitle": "Update the Add Link form to let users optionally attach an image to a link and pick a color from a set of common colors, and submit these values when creating a link.",
+      "files": [
+        "frontend/src/components/link-library/LinkForm.tsx",
+        "frontend/src/utils/linkPersonalization.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-edit-link-dialog-to-allow-changing-removing-the-link-image-and-changing-the-selected-color-and-persist-these-changes-via-the-existing-update-flow",
+      "featureTitle": "Update the Edit Link dialog to allow changing/removing the link image and changing the selected color, and persist these changes via the existing update flow.",
+      "files": [
+        "frontend/src/components/link-library/EditLinkDialog.tsx",
+        "frontend/src/utils/linkPersonalization.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-an-app-like-minimized-tile-view-for-saved-links-so-links-look-like-apps-show-a-square-compact-tile-with-the-link-image-when-available-when-no-image-is-available-show-a-fallback-avatar-that-uses-the-link-title-e-g-first-letter-s",
+      "featureTitle": "Implement an app-like minimized/tile view for saved links so links look like apps: show a square/compact tile with the link image when available; when no image is available, show a fallback avatar that uses the link title (e.g., first letter(s)).",
+      "files": [
+        "frontend/src/components/link-library/LinkLibraryPanel.tsx",
+        "frontend/src/components/link-library/LinkTile.tsx",
+        "frontend/src/components/link-library/LinkTileGrid.tsx",
+        "frontend/src/utils/linkPersonalization.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-desktop-hover-interactions-to-link-tiles-on-mouse-hover-visually-elevate-highlight-the-tile-and-optionally-reveal-quick-actions-without-breaking-keyboard-accessibility",
+      "featureTitle": "Add desktop hover interactions to link tiles: on mouse hover, visually elevate/highlight the tile (and optionally reveal quick actions) without breaking keyboard accessibility.",
+      "files": [
+        "frontend/src/components/link-library/LinkTile.tsx",
         "frontend/src/index.css"
       ],
       "components": [
@@ -17,29 +101,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-10"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-remove-or-neutralize-any-scroll-dependent-visual-effects-that-cause-perceived-color-shifts-e-g-translucent-overlays-backdrop-blur-over-the-background-image-so-the-background-reads-as-solid-black-during-scroll",
-      "featureTitle": "Remove or neutralize any scroll-dependent visual effects that cause perceived color shifts (e.g., translucent overlays/backdrop blur over the background image) so the background reads as solid black during scroll.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/layout/GameMenuLayout.tsx",
-        "frontend/src/components/link-library/LinkForm.tsx",
-        "frontend/src/components/link-library/LinkList.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-11"
+        "REQ-17"
       ],
       "confidence": "high"
     }

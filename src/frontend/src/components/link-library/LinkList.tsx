@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Link } from '../../backend';
+import type { LinkResponse } from '../../backend';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -8,12 +8,12 @@ import EditLinkDialog from './EditLinkDialog';
 import ConfirmDialog from '../common/ConfirmDialog';
 
 interface LinkListProps {
-  links: Link[];
+  links: LinkResponse[];
 }
 
 export default function LinkList({ links }: LinkListProps) {
-  const [editingLink, setEditingLink] = useState<{ url: string; title: string; description?: string } | null>(null);
-  const [deletingUrl, setDeletingUrl] = useState<string | null>(null);
+  const [editingLink, setEditingLink] = useState<LinkResponse | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleOpen = (url: string) => {
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -43,24 +43,24 @@ export default function LinkList({ links }: LinkListProps) {
         <CardContent className="flex-1 overflow-hidden p-0">
           <ScrollArea className="h-full px-6 pb-6">
             <div className="space-y-3">
-              {links.map((link, index) => (
+              {links.map((linkResponse) => (
                 <div
-                  key={index}
+                  key={linkResponse.id}
                   className="group relative rounded-lg border border-border bg-background p-4 transition-all hover:border-primary/50 hover:bg-card focus-within:ring-2 focus-within:ring-ring"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0 flex-1">
-                      <h3 className="font-semibold text-foreground">{link.title}</h3>
-                      <p className="mt-1 truncate text-sm text-foreground">{link.url}</p>
-                      {link.description && (
-                        <p className="mt-2 text-sm text-foreground">{link.description}</p>
+                      <h3 className="font-semibold text-foreground">{linkResponse.link.title}</h3>
+                      <p className="mt-1 truncate text-sm text-foreground">{linkResponse.link.url}</p>
+                      {linkResponse.link.description && (
+                        <p className="mt-2 text-sm text-foreground">{linkResponse.link.description}</p>
                       )}
                     </div>
                     <div className="flex shrink-0 gap-2">
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => handleOpen(link.url)}
+                        onClick={() => handleOpen(linkResponse.link.url)}
                         className="gap-2"
                       >
                         <ExternalLink className="h-4 w-4" />
@@ -69,14 +69,14 @@ export default function LinkList({ links }: LinkListProps) {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => setEditingLink(link)}
+                        onClick={() => setEditingLink(linkResponse)}
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => setDeletingUrl(link.url)}
+                        onClick={() => setDeletingId(linkResponse.id)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -91,17 +91,17 @@ export default function LinkList({ links }: LinkListProps) {
 
       {editingLink && (
         <EditLinkDialog
-          link={editingLink}
+          linkResponse={editingLink}
           onClose={() => setEditingLink(null)}
         />
       )}
 
-      {deletingUrl && (
+      {deletingId && (
         <ConfirmDialog
           title="Delete Link"
           description="Are you sure you want to delete this link? This action cannot be undone."
-          linkUrl={deletingUrl}
-          onClose={() => setDeletingUrl(null)}
+          linkId={deletingId}
+          onClose={() => setDeletingId(null)}
         />
       )}
     </>

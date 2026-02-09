@@ -1,8 +1,9 @@
 import { useGetAllLinks } from '../../hooks/useLinks';
 import LinkForm from './LinkForm';
-import LinkList from './LinkList';
+import LinkTileGrid from './LinkTileGrid';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, AlertCircle } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function LinkLibraryPanel() {
   const { data: links, isLoading, error } = useGetAllLinks();
@@ -36,8 +37,12 @@ export default function LinkLibraryPanel() {
       <div className="mx-auto w-full max-w-4xl">
         <LinkForm />
       </div>
-      <div className="mx-auto w-full max-w-4xl flex-1 overflow-hidden">
-        <LinkList links={links || []} />
+      <div className="mx-auto w-full max-w-7xl flex-1 overflow-hidden">
+        <ScrollArea className="h-full">
+          <div className="pb-6">
+            <LinkTileGrid links={links || []} />
+          </div>
+        </ScrollArea>
       </div>
     </div>
   );

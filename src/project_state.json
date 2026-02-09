@@ -1,15 +1,16 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 7,
+  "projectStateVersion": 9,
   "summary": "Desktop PC app to paste links and organize them into a clean, accessible library with a UI styled like a game options menu.",
   "architectural_notes": [
     "Add a theme/contrast system (e.g., light/dark tokens) so text and accent colors are derived from background luminance/contrast rules rather than hardcoded (remove orange accent).",
-    "Ensure theme/colors remain stable during scroll (no scroll-triggered theme/contrast recalculation or CSS/JS that changes background/text/accent colors on scroll); enforce fixed black background with white text + white accents."
+    "Ensure theme/colors remain stable during scroll (no scroll-triggered theme/contrast recalculation or CSS/JS that changes background/text/accent colors on scroll); enforce fixed black background with white text + white accents.",
+    "Introduce a per-link visual customization model (optional image + optional color) that does not override or destabilize the global always-dark theme (black background, white text/accents)."
   ],
   "known_issues": [
     "Colors/theme unexpectedly change when scrolling; user wants permanently black background, white text, and white accents with no scroll-dependent changes."
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "existing_features": [
     {
       "id": "feature-create-a-desktop-pc-friendly-ui-that-lets-users-paste-a-url-to-add-it-to-their-library-view-their-saved-links-and-open-a-selected-link-in-a-new-browser-tab-window",
@@ -90,6 +91,46 @@
         "REQ-11"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-fix-link-identity-consistency-across-the-app-by-returning-stable-link-identifiers-from-the-backend-so-the-frontend-can-reliably-edit-delete-the-correct-link-do-not-rely-on-array-index-or-url-as-an-implicit-id",
+      "title": "Fix link identity consistency across the app by returning stable link identifiers from the backend so the frontend can reliably edit/delete the correct link (do not rely on array index or URL as an implicit ID).",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-add-link-form-to-let-users-optionally-attach-an-image-to-a-link-and-pick-a-color-from-a-set-of-common-colors-and-submit-these-values-when-creating-a-link",
+      "title": "Update the Add Link form to let users optionally attach an image to a link and pick a color from a set of common colors, and submit these values when creating a link.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-edit-link-dialog-to-allow-changing-removing-the-link-image-and-changing-the-selected-color-and-persist-these-changes-via-the-existing-update-flow",
+      "title": "Update the Edit Link dialog to allow changing/removing the link image and changing the selected color, and persist these changes via the existing update flow.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-an-app-like-minimized-tile-view-for-saved-links-so-links-look-like-apps-show-a-square-compact-tile-with-the-link-image-when-available-when-no-image-is-available-show-a-fallback-avatar-that-uses-the-link-title-e-g-first-letter-s",
+      "title": "Implement an app-like minimized/tile view for saved links so links look like apps: show a square/compact tile with the link image when available; when no image is available, show a fallback avatar that uses the link title (e.g., first letter(s)).",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-desktop-hover-interactions-to-link-tiles-on-mouse-hover-visually-elevate-highlight-the-tile-and-optionally-reveal-quick-actions-without-breaking-keyboard-accessibility",
+      "title": "Add desktop hover interactions to link tiles: on mouse hover, visually elevate/highlight the tile (and optionally reveal quick actions) without breaking keyboard accessibility.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -111,6 +152,32 @@
       "id": "AR-3",
       "summary": "Update UI theming so all text uses a consistent color that adapts to background (white on dark, black on light) and replace the orange accent with black/white accents that match the current background for consistent contrast.",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Allow users to attach an image/picture to each saved link and display it in the library UI (with a sensible fallback when no image is provided).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add per-link personalization: let users choose from common colors for a link item (e.g., tile/background/accent) to make saved links more personable.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Add an app-like minimized/tile view for saved links with hover effects; if no image exists, show the link title/initials as the tile avatar/preview.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Extend the backend link data model to support per-link personalization fields: an optional image (stored as text) and an optional user-selected color (stored as text), and ensure these fields are persisted per user alongside url/title/description.",
+      "reqIds": [
+        "REQ-12"
+      ],
       "status": "pending"
     }
   ],

@@ -11,13 +11,16 @@ import { IDL } from '@icp-sdk/core/candid';
 export const Link = IDL.Record({
   'url' : IDL.Text,
   'title' : IDL.Text,
+  'color' : IDL.Opt(IDL.Text),
   'description' : IDL.Opt(IDL.Text),
+  'image' : IDL.Opt(IDL.Text),
 });
 export const UserRole = IDL.Variant({
   'admin' : IDL.Null,
   'user' : IDL.Null,
   'guest' : IDL.Null,
 });
+export const LinkResponse = IDL.Record({ 'id' : IDL.Text, 'link' : Link });
 export const UserProfile = IDL.Record({ 'name' : IDL.Text });
 
 export const idlService = IDL.Service({
@@ -25,7 +28,7 @@ export const idlService = IDL.Service({
   'addLink' : IDL.Func([IDL.Text, Link], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'deleteLink' : IDL.Func([IDL.Text], [], []),
-  'getAllLinks' : IDL.Func([], [IDL.Vec(Link)], ['query']),
+  'getAllLinks' : IDL.Func([], [IDL.Vec(LinkResponse)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getLink' : IDL.Func([IDL.Text], [Link], ['query']),
@@ -45,13 +48,16 @@ export const idlFactory = ({ IDL }) => {
   const Link = IDL.Record({
     'url' : IDL.Text,
     'title' : IDL.Text,
+    'color' : IDL.Opt(IDL.Text),
     'description' : IDL.Opt(IDL.Text),
+    'image' : IDL.Opt(IDL.Text),
   });
   const UserRole = IDL.Variant({
     'admin' : IDL.Null,
     'user' : IDL.Null,
     'guest' : IDL.Null,
   });
+  const LinkResponse = IDL.Record({ 'id' : IDL.Text, 'link' : Link });
   const UserProfile = IDL.Record({ 'name' : IDL.Text });
   
   return IDL.Service({
@@ -59,7 +65,7 @@ export const idlFactory = ({ IDL }) => {
     'addLink' : IDL.Func([IDL.Text, Link], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'deleteLink' : IDL.Func([IDL.Text], [], []),
-    'getAllLinks' : IDL.Func([], [IDL.Vec(Link)], ['query']),
+    'getAllLinks' : IDL.Func([], [IDL.Vec(LinkResponse)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getLink' : IDL.Func([IDL.Text], [Link], ['query']),

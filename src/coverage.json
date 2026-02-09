@@ -1,57 +1,118 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-09T04:10:22.461Z",
+  "generatedAt": "2026-02-09T04:25:34.943Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 6,
+    "implemented": 5,
     "items": [
       {
-        "id": "REQ-10",
-        "summary": "Make the app’s theme permanently dark: black background, white text, and white accents at all times (no light theme), including while scrolling any scrollable areas.",
+        "id": "REQ-12",
+        "summary": "Extend the backend link data model to support per-link personalization fields: an optional image (stored as text) and an optional user-selected color (stored as text), and ensure these fields are persisted per user alongside url/title/description.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-13",
+        "summary": "Fix link identity consistency across the app by returning stable link identifiers from the backend so the frontend can reliably edit/delete the correct link (do not rely on array index or URL as an implicit ID).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/index.css",
-          "frontend/src/App.tsx"
+          "frontend/src/hooks/useLinks.ts",
+          "frontend/src/components/link-library/LinkLibraryPanel.tsx",
+          "frontend/src/components/common/ConfirmDialog.tsx",
+          "frontend/src/components/link-library/EditLinkDialog.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/index.css",
-          "frontend/src/App.tsx"
+          "frontend/src/hooks/useLinks.ts",
+          "frontend/src/components/link-library/LinkLibraryPanel.tsx",
+          "frontend/src/components/common/ConfirmDialog.tsx",
+          "frontend/src/components/link-library/EditLinkDialog.tsx"
         ]
       },
       {
-        "id": "REQ-11",
-        "summary": "Remove or neutralize any scroll-dependent visual effects that cause perceived color shifts (e.g., translucent overlays/backdrop blur over the background image) so the background reads as solid black during scroll.",
+        "id": "REQ-14",
+        "summary": "Update the Add Link form to let users optionally attach an image to a link and pick a color from a set of common colors, and submit these values when creating a link.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/layout/GameMenuLayout.tsx",
-          "frontend/src/App.tsx",
           "frontend/src/components/link-library/LinkForm.tsx",
-          "frontend/src/components/link-library/LinkList.tsx"
+          "frontend/src/utils/linkPersonalization.ts"
         ],
         "matchedFiles": [
-          "frontend/src/components/layout/GameMenuLayout.tsx",
-          "frontend/src/App.tsx",
           "frontend/src/components/link-library/LinkForm.tsx",
-          "frontend/src/components/link-library/LinkList.tsx"
+          "frontend/src/utils/linkPersonalization.ts"
+        ]
+      },
+      {
+        "id": "REQ-15",
+        "summary": "Update the Edit Link dialog to allow changing/removing the link image and changing the selected color, and persist these changes via the existing update flow.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/link-library/EditLinkDialog.tsx",
+          "frontend/src/utils/linkPersonalization.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/link-library/EditLinkDialog.tsx",
+          "frontend/src/utils/linkPersonalization.ts"
+        ]
+      },
+      {
+        "id": "REQ-16",
+        "summary": "Implement an app-like minimized/tile view for saved links so links look like apps: show a square/compact tile with the link image when available; when no image is available, show a fallback avatar that uses the link title (e.g., first letter(s)).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/link-library/LinkTileGrid.tsx",
+          "frontend/src/components/link-library/LinkTile.tsx",
+          "frontend/src/components/link-library/LinkLibraryPanel.tsx",
+          "frontend/src/utils/linkPersonalization.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/link-library/LinkTileGrid.tsx",
+          "frontend/src/components/link-library/LinkTile.tsx",
+          "frontend/src/components/link-library/LinkLibraryPanel.tsx",
+          "frontend/src/utils/linkPersonalization.ts"
+        ]
+      },
+      {
+        "id": "REQ-17",
+        "summary": "Add desktop hover interactions to link tiles: on mouse hover, visually elevate/highlight the tile (and optionally reveal quick actions) without breaking keyboard accessibility.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/link-library/LinkTile.tsx",
+          "frontend/src/index.css"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/link-library/LinkTile.tsx",
+          "frontend/src/index.css"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
-    "frontend/src/components/layout/GameMenuLayout.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/common/ConfirmDialog.tsx",
+    "frontend/src/components/link-library/EditLinkDialog.tsx",
     "frontend/src/components/link-library/LinkForm.tsx",
+    "frontend/src/components/link-library/LinkLibraryPanel.tsx",
     "frontend/src/components/link-library/LinkList.tsx",
+    "frontend/src/components/link-library/LinkTile.tsx",
+    "frontend/src/components/link-library/LinkTileGrid.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useLinks.ts",
     "frontend/src/index.css",
+    "frontend/src/utils/linkPersonalization.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

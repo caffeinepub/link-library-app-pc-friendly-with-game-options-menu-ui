@@ -10,7 +10,13 @@ export type Option<T> = Some<T> | None;
 export interface Link {
     url: string;
     title: string;
+    color?: string;
     description?: string;
+    image?: string;
+}
+export interface LinkResponse {
+    id: string;
+    link: Link;
 }
 export interface UserProfile {
     name: string;
@@ -24,7 +30,7 @@ export interface backendInterface {
     addLink(id: string, link: Link): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     deleteLink(id: string): Promise<void>;
-    getAllLinks(): Promise<Array<Link>>;
+    getAllLinks(): Promise<Array<LinkResponse>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getLink(id: string): Promise<Link>;
